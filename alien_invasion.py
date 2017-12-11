@@ -7,6 +7,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from pygame.sprite import Group
+
 import game_functions as gamef
 
 def run_game():
@@ -18,8 +19,11 @@ def run_game():
     
     # create a ship
     ship = Ship(ai_settings,screen)
-    # create a group to store the bullet
+    # create a group to store the bullets
     bullets = Group()
+    # create a group to store te aliens
+    aliens = Group()
+    gamef.create_fleet(ai_settings,screen,aliens)
 
     # set the background
     screen.fill(ai_settings.bg_color)
@@ -33,6 +37,6 @@ def run_game():
         # update the bullets
         gamef.update_bullet(bullets)
         # update the screen
-        gamef.update_screen(ai_settings,screen,ship,bullets) 
+        gamef.update_screen(ai_settings,screen,ship,aliens,bullets) 
 
 run_game()
