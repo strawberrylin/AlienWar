@@ -23,7 +23,7 @@ def run_game():
     bullets = Group()
     # create a group to store te aliens
     aliens = Group()
-    gamef.create_fleet(ai_settings,screen,aliens)
+    gamef.create_fleet(ai_settings,screen,ship,aliens)
 
     # set the background
     screen.fill(ai_settings.bg_color)
