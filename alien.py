@@ -32,3 +32,21 @@ class Alien(Sprite):
         draw the alien at the setted site
         """
         self.screen.blit(self.image,self.rect)
+
+    def update(self):
+        """
+        move the alien towards right or left
+        """
+        self.x += (self.settings.alien_speed_factor * self.settings.fleet_direction)
+        self.rect.x = self.x
+
+    def check_edges(self):
+        """
+        check if alien hit the edge of the screen
+        """
+        screen_rect = self.screen.get_rect()
+        if self.rect.right >= screen_rect.right:
+            return True
+        elif self.rect.left <= 0:
+            return True
+

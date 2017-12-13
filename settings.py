@@ -21,3 +21,9 @@ class Settings():
         self.bullet_height = 15
         self.bullet_color = (60,60,60)
  
+        # alien setting
+        self.alien_speed_factor = 1
+        # after knocking at the edge of the screen,drop down
+        self.fleet_drop_speed = 10
+        # 1:right,-1:left
+        self.fleet_direction = 1
