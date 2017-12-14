@@ -51,6 +51,7 @@ def update_screen(ai_settings,screen,ship,aliens,bullets):
     # overdraw the screen
     screen.fill(ai_settings.bg_color)
     # overdraw all teh bullets
+    # sprite() return a list
     for bullet in bullets.sprites():
         bullet.draw_bullet()
     ship.blitme()
@@ -59,7 +60,7 @@ def update_screen(ai_settings,screen,ship,aliens,bullets):
     # enable recent draw
     pygame.display.flip()
 
-def update_bullet(bullets):
+def update_bullet(ai_settings,screen,ship,aliens,bullets):
     """
     update the bullet and delete the old bullets
     """
@@ -69,6 +70,12 @@ def update_bullet(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet) 
+    # Check if bullet hit the alien.If then,delete the bullet and alien.
+    # group.sprite.collide() return a dictionary <bullet,alien>
+    # compare the bullet's rect with alien's rect,if equal,delete the alien.
+    
+    check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets)
+
 
 def update_alien(ai_settings,aliens):
     """
@@ -133,4 +140,17 @@ def change_fleet_direction(ai_settings,aliens):
     for alien in aliens.sprites():
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
+
+def check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets):
+    """
+    react to the hit between aliens and bullets
+    """
+    # delete the bullets and aliens if they hit
+    collide_alien_bullet = pygame.sprite.groupcollide(bullets,aliens,True,True)
+
+    # check the list of the aliens and create a new group of aliens
+    if len(aliens) == 0 :
+        bullets.empty()
+        create_fleet(ai_settings,screen,ship,aliens)
+
 
