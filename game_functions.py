@@ -6,6 +6,7 @@ import pygame
 
 from bullet import Bullet
 from alien import Alien
+from time import sleep
 
 def check_keydown_events(event,ai_settings,screen,ship,bullets):
     """
@@ -77,12 +78,21 @@ def update_bullet(ai_settings,screen,ship,aliens,bullets):
     check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets)
 
 
-def update_alien(ai_settings,aliens):
+
+def update_alien(ai_settings,states,screen,ship,aliens,bullets):
     """
     check the site of the alien and update the site of the every alien
     """
     check_fleet_edges(ai_settings,aliens)
     aliens.update()
+
+    # check the hit between aliens and ship
+    # sprite.spritecollideany() return bool value if hit
+    if pygame.sprite.spritecollideany(ship,aliens):
+        ship_hit(ai_settings,states,screen,ship,aliens,bullets)
+
+    # check if aliens arrive at the bottom of the screen
+    check_aliens_bottom(ai_settings,states,screen,ship,aliens,bullets)
 
 def get_number_aliens_x(ai_settings,alien_width):
     """
@@ -153,4 +163,34 @@ def check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets):
         bullets.empty()
         create_fleet(ai_settings,screen,ship,aliens)
 
+def ship_hit(ai_settings,states,screen,ship,aliens,bullets):
+    """
+    react to the hit between ship and aliens
+    """
+    if states.ships_left > 0:
+        # ship_left -1
+        states.ships_left -= 1
+        
+        # empty the bullets and aliens list
+        aliens.empty()
+        bullets.empty()
+        
+        # create new group of aliens and set the ship at the center-bottom of the screen
+        create_fleet(ai_settings,screen,ship,aliens)
+        ship.center_ship()
+        
+        # pause
+        sleep(0.5)
+    else:
+        states.game_active = False
 
+def check_aliens_bottom(ai_settings,states,screen,ship,aliens,bullets):
+    """
+    check if aliens arrive at the bottom of te screen
+    """
+    screen_rect = screen.get_rect()
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom:
+        # deal like the ship hit
+            ship_hit(ai_settings,states,screen,ship,aliens,bullets)
+            break

@@ -49,3 +49,9 @@ class Ship():
         draw the ship at the sit
         """
         self.screen.blit(self.image,self.rect)
+
+    def center_ship(self):
+        """
+        set the ship at the center-bottom of the screen
+        """
+        self.center = self.screen_rect.centerx

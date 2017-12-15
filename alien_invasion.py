@@ -7,6 +7,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from pygame.sprite import Group
+from game_states import Game_states
 
 import game_functions as gamef
 
@@ -17,6 +18,9 @@ def run_game():
     screen = pygame.display.set_mode((ai_settings.screen_width,ai_settings.screen_height))
     pygame.display.set_caption("Alien War")
     
+    # create a intence of Game_states
+    games = Game_states(ai_settings)
+
     # create a ship
     ship = Ship(ai_settings,screen)
     # create a group to store the bullets
@@ -32,12 +36,15 @@ def run_game():
     while True:
         # watch the mouse and keyboard
         gamef.check_events(ai_settings,screen,ship,bullets)
-        # update the locating
-        ship.update()
-        # update the bullets
-        gamef.update_bullet(ai_settings,screen,ship,aliens,bullets)
-        # update the aliens
-        gamef.update_alien(ai_settings,aliens)
+        if games.game_active:
+            # update the locating
+            ship.update()
+            # update the bullets
+            gamef.update_bullet(ai_settings,screen,ship,aliens,bullets)
+            # update the aliens
+            gamef.update_alien(ai_settings,games,screen,ship,aliens,bullets)
+        else:
+            sys.exit()
         # update the screen
         gamef.update_screen(ai_settings,screen,ship,aliens,bullets) 
 
