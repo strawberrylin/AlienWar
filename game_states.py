@@ -10,7 +10,7 @@ class Game_states():
         initialize the value
         """
         self.ai_settings = ai_settings
-        self.game_active = True
+        self.game_active = 0
         self.reset_states()
 
     def reset_states(self):

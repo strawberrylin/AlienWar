@@ -48,15 +48,30 @@ def check_events(ai_settings,screen,ship,bullets):
         elif event.type == pygame.KEYUP:
             check_keyup_events(event,ship)
 
-def update_screen(ai_settings,screen,ship,aliens,bullets):
+def update_screen(ai_settings,screen,states,ship,aliens,bullets,play_button):
     # overdraw the screen
     screen.fill(ai_settings.bg_color)
-    # overdraw all teh bullets
+    # overdraw all the bullets
     # sprite() return a list
     for bullet in bullets.sprites():
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+    
+    # if game is not started, draw the play_button
+    if states.game_active == 0:
+        play_button.draw_button()
+    elif states.game_active == 1:
+        # overdraw the screen
+        screen.fill(ai_settings.bg_color)
+        # overdraw all the bullets
+        # sprite() return a list
+        for bullet in bullets.sprites():
+            bullet.draw_bullet()
+        ship.blitme()
+        aliens.draw(screen)
+    elif states.game_active == -1:
+        sys.exit()
 
     # enable recent draw
     pygame.display.flip()
