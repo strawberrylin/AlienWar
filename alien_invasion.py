@@ -9,6 +9,7 @@ from ship import Ship
 from pygame.sprite import Group
 from game_states import Game_states
 from button import Button
+from scoreboard import Scoreboard
 
 import game_functions as gamef
 
@@ -24,6 +25,9 @@ def run_game():
     
     # create a intence of Game_states
     games = Game_states(ai_settings)
+
+    # create the score board
+    score_board = Scoreboard(ai_settings, screen, games)
 
     # set the background
     screen.fill(ai_settings.bg_color)
@@ -43,7 +47,7 @@ def run_game():
     # start the main loop
     while True:
         # watch the mouse and keyboard
-        gamef.check_events(ai_settings,screen,ship,bullets)
+        gamef.check_events(ai_settings,screen,games,play_button,ship,aliens,bullets)
         if games.game_active == 1:
             # update the locating
             ship.update()
@@ -52,7 +56,7 @@ def run_game():
             # update the aliens
             gamef.update_alien(ai_settings,games,screen,ship,aliens,bullets)
         # update the screen
-        gamef.update_screen(ai_settings,screen,games,ship,aliens,bullets,play_button) 
+        gamef.update_screen(ai_settings,screen,games,score_board,ship,aliens,bullets,play_button) 
 
 run_game()
 

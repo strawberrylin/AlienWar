@@ -18,3 +18,4 @@ class Game_states():
         initialize the value
         """
         self.ships_left = self.ai_settings.ship_number
+        self.score = 0
