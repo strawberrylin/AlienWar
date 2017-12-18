@@ -52,7 +52,7 @@ def run_game():
             # update the locating
             ship.update()
             # update the bullets
-            gamef.update_bullet(ai_settings,screen,ship,aliens,bullets)
+            gamef.update_bullet(ai_settings,screen,games,score_board,ship,aliens,bullets)
             # update the aliens
             gamef.update_alien(ai_settings,games,screen,ship,aliens,bullets)
         # update the screen

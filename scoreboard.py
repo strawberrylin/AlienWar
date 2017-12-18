@@ -27,8 +27,12 @@ class Scoreboard():
         """
         render thr score to a image
         """
-        score_str = str(self.states.score)
+        # round() function acurate the float, second format -1 make the nearest 10, 100, 1000
+        rounded_score = int(round(self.states.score, -1))
+        # cat string function to insert ',' in the string
+        score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color, self.ai_settings.bg_color)
+        pygame.image.save(self.score_image,'score.bmp')
         
         # lay the score at the right-top of the screen
         self.score_rect = self.score_image.get_rect()

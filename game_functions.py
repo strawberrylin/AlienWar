@@ -61,9 +61,6 @@ def update_screen(ai_settings,screen,states,score_board,ship,aliens,bullets,play
     ship.blitme()
     aliens.draw(screen)
 
-    # show the score
-    score_board.show_score()
-    
     # if game is not started, draw the play_button
     if states.game_active == 0:
         play_button.draw_button()
@@ -76,14 +73,15 @@ def update_screen(ai_settings,screen,states,score_board,ship,aliens,bullets,play
             bullet.draw_bullet()
         ship.blitme()
         aliens.draw(screen)
+        # show the score 
+        score_board.show_score()
     elif states.game_active == -1:
         sys.exit()
 
-    pygame.display.flip()
     # enable recent draw
     pygame.display.flip()
 
-def update_bullet(ai_settings,screen,ship,aliens,bullets):
+def update_bullet(ai_settings,screen,states,score_board,ship,aliens,bullets):
     """
     update the bullet and delete the old bullets
     """
@@ -97,9 +95,7 @@ def update_bullet(ai_settings,screen,ship,aliens,bullets):
     # group.sprite.collide() return a dictionary <bullet,alien>
     # compare the bullet's rect with alien's rect,if equal,delete the alien.
     
-    check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets)
-
-
+    check_collide_bullet_alien(ai_settings,screen,states,score_board,ship,aliens,bullets)
 
 def update_alien(ai_settings,states,screen,ship,aliens,bullets):
     """
@@ -173,13 +169,18 @@ def change_fleet_direction(ai_settings,aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
-def check_collide_bullet_alien(ai_settings,screen,ship,aliens,bullets):
+def check_collide_bullet_alien(ai_settings,screen,states,score_board,ship,aliens,bullets):
     """
     react to the hit between aliens and bullets
     """
     # delete the bullets and aliens if they hit
     collide_alien_bullet = pygame.sprite.groupcollide(bullets,aliens,True,True)
 
+    # if hit, add the score
+    if collide_alien_bullet :
+        for aliens in collide_alien_bullet.values():
+            states.score += ai_settings.alien_points * len(aliens)
+            score_board.prep_score()
     # check the list of the aliens and create a new group of aliens
     if len(aliens) == 0 :
         bullets.empty()
