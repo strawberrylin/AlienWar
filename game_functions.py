@@ -36,7 +36,7 @@ def check_keyup_events(event,ship):
         # stop move left
         ship.moving_left = False
 
-def check_events(ai_settings,screen,states,play_button,ship,aliens,bullets):
+def check_events(ai_settings,screen,states,score_board,play_button,ship,aliens,bullets):
     """
     react to the mouse and keyboard
     """
@@ -49,7 +49,7 @@ def check_events(ai_settings,screen,states,play_button,ship,aliens,bullets):
             check_keyup_events(event,ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x,mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, states, play_button, ship, aliens,bullets,  mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, states, score_board, play_button, ship, aliens,bullets,  mouse_x, mouse_y)
 
 def update_screen(ai_settings,screen,states,score_board,ship,aliens,bullets,play_button):
     # overdraw the screen
@@ -181,10 +181,17 @@ def check_collide_bullet_alien(ai_settings,screen,states,score_board,ship,aliens
         for aliens in collide_alien_bullet.values():
             states.score += ai_settings.alien_points * len(aliens)
             score_board.prep_score()
+        check_highest_score(states, score_board)
     # check the list of the aliens and create a new group of aliens
     if len(aliens) == 0 :
         bullets.empty()
         ai_settings.speedup_game()
+
+        # level up
+        states.level += 1
+        score_board.prep_level()
+
+        # create a group of aliens
         create_fleet(ai_settings,screen,ship,aliens)
 
 def ship_hit(ai_settings,states,screen,ship,aliens,bullets):
@@ -220,7 +227,7 @@ def check_aliens_bottom(ai_settings,states,screen,ship,aliens,bullets):
             ship_hit(ai_settings,states,screen,ship,aliens,bullets)
             break
 
-def check_play_button(ai_settings,screen,states, play_button,ship,aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings,screen,states,score_board,play_button,ship,aliens,bullets,mouse_x,mouse_y):
     """
     start the ame when click at the button
     """
@@ -233,6 +240,11 @@ def check_play_button(ai_settings,screen,states, play_button,ship,aliens, bullet
         # reset the information
         states.reset_states()
         states.game_active = 1
+        
+        # reset the score board and level
+        score_board.prep_score()
+        score_board.prep_highest_score()
+        score_board.prep_level()
 
         # empty the bullets and aliens list
         aliens.empty()
@@ -241,3 +253,13 @@ def check_play_button(ai_settings,screen,states, play_button,ship,aliens, bullet
         # create a new group of aliens
         create_fleet(ai_settings,screen,ship,aliens)
         ship.center_ship()
+
+def check_highest_score(states, score_board):
+    """
+    check if there is new score and update the score
+    """
+    if states.score > states.highest_score:
+        states.highest_score = states.score
+        score_board.prep_highest_score()
+
+

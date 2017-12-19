@@ -47,7 +47,7 @@ def run_game():
     # start the main loop
     while True:
         # watch the mouse and keyboard
-        gamef.check_events(ai_settings,screen,games,play_button,ship,aliens,bullets)
+        gamef.check_events(ai_settings,screen,games,score_board,play_button,ship,aliens,bullets)
         if games.game_active == 1:
             # update the locating
             ship.update()
