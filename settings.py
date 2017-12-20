@@ -29,7 +29,7 @@ class Settings():
         self.fleet_direction = 1
 
         # ship setting
-        self.ship_number = 2
+        self.ship_number = 3
 
         # the factor to speed up the game
         self.speedup_scale = 1.2
